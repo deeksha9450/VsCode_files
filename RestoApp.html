@@ -111,20 +111,31 @@ li button:hover{
     <h1>Welcome to Resto</h1>
     <input type="text" id="name" placeholder="Enter Food name">
     <input type="number" id="price" placeholder="Enter price">
-    <button onclick="addFood()">Add food</button>
-    <ul id="list">
-    </ul>
+    <button id="btn" onclick="addFood()">Add food</button>
+    <ul id="list"></ul>
     <script>
         let localData=JSON.parse(localStorage.getItem("food"));
-        let food=localData? localData:[];
+        let food=localData? localData :[];
         console.log(food);
+        editId=undefined;
+        displayFood()
 
         function addFood(){
         const name= document.querySelector("#name").value;
         const price=document.querySelector("#price").value;
         const id=Date.now();
+        if(!editId){
         const collection={name, price,id}
         food.push(collection);
+        }else{
+            food.map((item)=>{
+                if(item.id == editId){
+                    item.name=name;
+                    item.price=price;
+                    return item;
+                }
+            })
+        }
         localStorage.setItem("food",JSON.stringify(food))
         displayFood()
     }
@@ -133,15 +144,28 @@ li button:hover{
         let list=document.querySelector("#list");
         let collection="";
         for(const item of food){
-            collection+="<li>"+item.name+"-"+item.price+"<button onclick=deleteFood("+item.id+")>Delete</button></li>";
+            collection+="<li>"+item.name+"-"+item.price+"<button onclick=deleteFood("+item.id+")>Delete</button><button onclick=editFood("+item.id+")>Edit</button></li>";
         }
         list.innerHTML=collection
     }
     function deleteFood(id){
         food=food.filter((item)=>item.id!==Number(id));
-        displayFood()
-        
+        localStorage.setItem("food",JSON.stringify(food)) 
+        displayFood()    
     }
+    function editFood(id){
+        selectedFood=food.find((item)=>item.id==Number(id));
+        editId=id;
+        document.querySelector("#name").value=selectedFood.name;
+        document.querySelector("#price").value=selectedFood.price;
+        document.querySelector("#btn").innerHTML="Update Food"
+
+       // console.log(selectedFood);
+        
+
+
+    }
+
     </script>
     
 </body>
