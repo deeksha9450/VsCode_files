@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resto App</title>
+</head>
+<body>
+    <h1>Welcome to Resto</h1>
+    <input type="text" id="name" placeholder="Enter Food name">
+    <input type="number" id="price" placeholder="Enter price">
+    <button onclick="addFood()">Add food</button>
+    <ul id="list">
+    </ul>
+    <script>
+        let food=[];
+    function addFood(){
+        const name= document.querySelector("#name").value;
+        const price=document.querySelector("#price").value;
+        const id=Date.now;
+        const collection={name, price,id}
+        food.push(collection);
+        displayFood()
+    }
+
+    function displayFood(){
+        let list=document.querySelector("#list");
+        let collection="";
+        for(let item of food){
+            collection+="<li>"+item.name+"<button onclick=deleteFood("+item.id+")>Delete</button></li>";
+        }
+        list.innerHTML=collection
+    }
+    function deleteFood(){
+        
+    }
+    </script>
+    
+</body>
+</html>
